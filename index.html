@@ -768,19 +768,420 @@
     .hero-buttons { flex-direction: column; }
     .btn-adult, .btn-child { text-align: center; justify-content: center; }
   }
+
+  /* ===== SOS BANNER ===== */
+  #sos-sticky {
+    position: fixed; bottom: 24px; right: 24px; z-index: 200;
+  }
+
+  .sos-fab {
+    width: 64px; height: 64px;
+    background: var(--red-alert);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 32px rgba(239,68,68,0.5);
+    border: none;
+    animation: pulse-sos 2.5s ease-in-out infinite;
+    font-size: 26px;
+    transition: transform 0.2s;
+  }
+
+  .sos-fab:hover { transform: scale(1.1); }
+
+  @keyframes pulse-sos {
+    0%, 100% { box-shadow: 0 8px 32px rgba(239,68,68,0.5); }
+    50% { box-shadow: 0 8px 48px rgba(239,68,68,0.8), 0 0 0 12px rgba(239,68,68,0.1); }
+  }
+
+  .sos-panel {
+    position: absolute; bottom: 76px; right: 0;
+    width: 320px;
+    background: var(--blue-deep);
+    border: 1px solid rgba(239,68,68,0.4);
+    border-radius: 20px;
+    padding: 24px;
+    display: none;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  }
+
+  .sos-panel.open { display: block; }
+
+  .sos-panel-title {
+    font-family: 'Unbounded', cursive;
+    font-size: 14px; font-weight: 700;
+    color: var(--white);
+    margin-bottom: 16px; letter-spacing: -0.3px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .sos-number {
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 12px 14px;
+    margin-bottom: 10px; transition: background 0.2s;
+  }
+
+  .sos-number:hover { background: rgba(255,255,255,0.08); }
+
+  .sos-number-left { display: flex; align-items: center; gap: 10px; }
+
+  .sos-number-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+
+  .sos-number-name {
+    font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 2px;
+  }
+
+  .sos-number-tel {
+    font-family: 'Unbounded', cursive;
+    font-size: 15px; font-weight: 700; color: var(--white);
+  }
+
+  .sos-call-btn {
+    background: #22C55E;
+    color: white; border: none; border-radius: 8px;
+    padding: 8px 14px;
+    font-family: 'Unbounded', cursive;
+    font-size: 11px; font-weight: 700;
+    cursor: pointer; transition: background 0.2s;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
+  }
+
+  .sos-call-btn:hover { background: #16A34A; }
+
+  .sos-close {
+    width: 100%; margin-top: 14px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.5);
+    font-size: 12px; padding: 8px; border-radius: 8px;
+    cursor: pointer;
+  }
+
+  /* ===== CHECKLIST ===== */
+  #checklist-section { background: #FEF2F2; }
+
+  .checklist-wrapper {
+    max-width: 760px;
+  }
+
+  .checklist-header {
+    background: var(--red-alert);
+    border-radius: 20px 20px 0 0;
+    padding: 28px 36px;
+    display: flex; align-items: center; gap: 16px;
+  }
+
+  .checklist-header-icon {
+    font-size: 36px;
+  }
+
+  .checklist-header-title {
+    font-family: 'Unbounded', cursive;
+    font-size: 18px; font-weight: 900;
+    color: white; letter-spacing: -0.5px;
+  }
+
+  .checklist-header-sub {
+    font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 4px;
+  }
+
+  .checklist-body {
+    background: white;
+    border-radius: 0 0 20px 20px;
+    border: 2px solid #FECACA;
+    border-top: none;
+    padding: 28px 36px;
+  }
+
+  .checklist-timer-bar {
+    background: #FEE2E2;
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 8px;
+  }
+
+  .timer-label {
+    font-size: 13px; font-weight: 600; color: var(--red-alert);
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .timer-display {
+    font-family: 'Unbounded', cursive;
+    font-size: 20px; font-weight: 900; color: var(--red-alert);
+  }
+
+  .checklist-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid #FEE2E2;
+    cursor: pointer;
+    transition: opacity 0.3s;
+  }
+
+  .checklist-item:last-child { border-bottom: none; }
+
+  .checklist-item.done { opacity: 0.5; }
+
+  .checklist-item.done .cl-text { text-decoration: line-through; color: var(--gray-text); }
+
+  .cl-checkbox {
+    width: 24px; height: 24px; flex-shrink: 0;
+    border: 2px solid #FECACA;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px; transition: all 0.2s;
+    background: white;
+  }
+
+  .checklist-item.done .cl-checkbox {
+    background: #22C55E; border-color: #22C55E; color: white;
+  }
+
+  .cl-priority {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; padding: 2px 8px; border-radius: 100px;
+    flex-shrink: 0; margin-top: 3px;
+  }
+
+  .cl-priority.urgent { background: #FEE2E2; color: var(--red-alert); }
+  .cl-priority.soon { background: #FEF9C3; color: #92400E; }
+  .cl-priority.later { background: #DBEAFE; color: var(--blue-brand); }
+
+  .cl-text {
+    flex: 1; font-size: 14px; line-height: 1.5; font-weight: 500;
+  }
+
+  .cl-time {
+    font-size: 11px; color: var(--gray-text); margin-top: 2px;
+  }
+
+  .cl-progress-row {
+    display: flex; align-items: center; gap: 12px; margin-top: 20px;
+  }
+
+  .cl-progress-track {
+    flex: 1; height: 6px; background: #FEE2E2; border-radius: 6px; overflow: hidden;
+  }
+
+  .cl-progress-fill {
+    height: 100%; background: #22C55E; border-radius: 6px;
+    transition: width 0.4s ease;
+  }
+
+  .cl-progress-text {
+    font-family: 'Unbounded', cursive;
+    font-size: 12px; font-weight: 700; color: var(--blue-deep);
+    white-space: nowrap;
+  }
+
+  .cl-reset {
+    font-size: 12px; color: var(--gray-text); background: none; border: none;
+    cursor: pointer; text-decoration: underline; margin-top: 8px;
+  }
+
+  /* ===== SCHEMES DATABASE ===== */
+  #schemes { background: var(--white); }
+
+  .schemes-filter {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 36px;
+  }
+
+  .scheme-filter-btn {
+    padding: 8px 18px;
+    border-radius: 100px;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    border: 2px solid transparent;
+    background: var(--gray-soft);
+    color: var(--blue-deep);
+  }
+
+  .scheme-filter-btn:hover, .scheme-filter-btn.active {
+    background: var(--blue-brand);
+    color: white;
+  }
+
+  .schemes-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .scheme-card {
+    background: var(--white);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 18px; padding: 24px;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .scheme-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.1);
+  }
+
+  .scheme-card[data-hidden="true"] { display: none; }
+
+  .scheme-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; padding: 3px 10px;
+    border-radius: 100px; margin-bottom: 14px;
+  }
+
+  .scheme-badge.new { background: #DCFCE7; color: #15803D; }
+  .scheme-badge.phone { background: #DBEAFE; color: #1D4ED8; }
+  .scheme-badge.online { background: #F3E8FF; color: #7C3AED; }
+  .scheme-badge.social { background: #FEF9C3; color: #92400E; }
+  .scheme-badge.invest { background: #FEE2E2; color: #B91C1C; }
+
+  .scheme-title {
+    font-family: 'Unbounded', cursive;
+    font-size: 14px; font-weight: 700;
+    margin-bottom: 8px; letter-spacing: -0.3px;
+  }
+
+  .scheme-desc {
+    font-size: 13px; color: var(--gray-text); line-height: 1.6;
+    margin-bottom: 14px;
+  }
+
+  .scheme-how {
+    background: var(--gray-soft);
+    border-radius: 10px; padding: 12px 14px;
+    font-size: 12px; color: var(--blue-deep); line-height: 1.6;
+  }
+
+  .scheme-how strong {
+    font-weight: 700; display: block; margin-bottom: 4px;
+    color: var(--red-alert);
+  }
+
+  .scheme-date {
+    position: absolute; top: 16px; right: 16px;
+    font-size: 10px; color: var(--gray-text); font-weight: 600;
+  }
+
+  /* ===== PDF BANNER ===== */
+  .pdf-banner {
+    margin-top: 52px;
+    background: linear-gradient(135deg, #1e3a5f 0%, #0A1628 100%);
+    border-radius: 20px;
+    padding: 32px 36px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px; flex-wrap: wrap;
+  }
+
+  .pdf-banner-left {
+    display: flex; align-items: center; gap: 20px;
+  }
+
+  .pdf-icon {
+    width: 56px; height: 56px; flex-shrink: 0;
+    background: rgba(239,68,68,0.15);
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+  }
+
+  .pdf-title {
+    font-family: 'Unbounded', cursive;
+    font-size: 16px; font-weight: 700;
+    color: white; margin-bottom: 6px; letter-spacing: -0.3px;
+  }
+
+  .pdf-sub {
+    font-size: 13px; color: rgba(255,255,255,0.5);
+  }
+
+  .pdf-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 24px;
+    background: white; color: var(--blue-deep);
+    font-family: 'Unbounded', cursive;
+    font-size: 12px; font-weight: 700;
+    border-radius: 12px; cursor: pointer; border: none;
+    transition: all 0.25s; text-decoration: none;
+    white-space: nowrap; letter-spacing: -0.3px;
+  }
+
+  .pdf-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,255,255,0.2); }
+
+  /* ===== NEW SECTION BG ===== */
+  #checklist-section { padding: 90px 24px; }
 </style>
 </head>
 <body>
+
+<!-- SOS FLOATING BUTTON -->
+<div id="sos-sticky">
+  <button class="sos-fab" onclick="toggleSOS()" title="Экстренная помощь">🆘</button>
+  <div class="sos-panel" id="sosPanel">
+    <div class="sos-panel-title">🚨 Звонить прямо сейчас</div>
+    <div class="sos-number">
+      <div class="sos-number-left">
+        <div class="sos-number-icon" style="background:rgba(239,68,68,0.15)">🏦</div>
+        <div>
+          <div class="sos-number-name">Блокировка карты (Сбер)</div>
+          <div class="sos-number-tel">900</div>
+        </div>
+      </div>
+      <a href="tel:900" class="sos-call-btn">📞 Звонить</a>
+    </div>
+    <div class="sos-number">
+      <div class="sos-number-left">
+        <div class="sos-number-icon" style="background:rgba(26,86,219,0.15)">🏛️</div>
+        <div>
+          <div class="sos-number-name">Горячая линия ЦБ РФ</div>
+          <div class="sos-number-tel">300</div>
+        </div>
+      </div>
+      <a href="tel:300" class="sos-call-btn">📞 Звонить</a>
+    </div>
+    <div class="sos-number">
+      <div class="sos-number-left">
+        <div class="sos-number-icon" style="background:rgba(249,115,22,0.15)">👮</div>
+        <div>
+          <div class="sos-number-name">Полиция</div>
+          <div class="sos-number-tel">102</div>
+        </div>
+      </div>
+      <a href="tel:102" class="sos-call-btn">📞 Звонить</a>
+    </div>
+    <div class="sos-number">
+      <div class="sos-number-left">
+        <div class="sos-number-icon" style="background:rgba(34,197,94,0.15)">🛡️</div>
+        <div>
+          <div class="sos-number-name">Единый номер (с моб.)</div>
+          <div class="sos-number-tel">112</div>
+        </div>
+      </div>
+      <a href="tel:112" class="sos-call-btn">📞 Звонить</a>
+    </div>
+    <button class="sos-close" onclick="toggleSOS()">✕ Закрыть</button>
+  </div>
+</div>
 
 <!-- NAV -->
 <nav>
   <div class="nav-inner">
     <div class="nav-logo">🛡️ Защита<span>Online</span></div>
     <ul class="nav-links">
+      <li><a href="#sos">🚨 SOS</a></li>
       <li><a href="#types">Виды угроз</a></li>
       <li><a href="#recognize">Как распознать</a></li>
       <li><a href="#children">Детям</a></li>
       <li><a href="#adults">Взрослым</a></li>
+      <li><a href="#schemes">Схемы</a></li>
       <li><a href="#quiz">Тест</a></li>
     </ul>
   </div>
@@ -846,6 +1247,147 @@
           <circle cx="75" cy="160" r="2" fill="rgba(255,255,255,0.2)"/>
           <circle cx="225" cy="175" r="2" fill="rgba(255,255,255,0.2)"/>
         </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOS SECTION -->
+<section id="sos" style="background:#0A1628; padding:70px 24px;">
+  <div class="section-inner">
+    <span class="section-tag" style="color:#FCA5A5;">🚨 Экстренная помощь</span>
+    <h2 class="section-title" style="color:white;">Вас обманули? Действуйте сейчас</h2>
+    <p class="section-sub">Каждая минута на счету. Вот номера, которые нужно набрать в первую очередь.</p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px;">
+      <a href="tel:900" style="text-decoration:none;">
+        <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:16px; padding:24px; text-align:center; transition:all 0.2s; cursor:pointer;" onmouseover="this.style.background='rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">
+          <div style="font-size:32px; margin-bottom:8px;">🏦</div>
+          <div style="font-family:'Unbounded',cursive; font-size:28px; font-weight:900; color:white; line-height:1;">900</div>
+          <div style="font-size:12px; color:rgba(255,255,255,0.5); margin-top:6px;">Сбербанк — блокировка карты</div>
+        </div>
+      </a>
+      <a href="tel:300" style="text-decoration:none;">
+        <div style="background:rgba(26,86,219,0.1); border:1px solid rgba(26,86,219,0.3); border-radius:16px; padding:24px; text-align:center; transition:all 0.2s; cursor:pointer;" onmouseover="this.style.background='rgba(26,86,219,0.2)'" onmouseout="this.style.background='rgba(26,86,219,0.1)'">
+          <div style="font-size:32px; margin-bottom:8px;">🏛️</div>
+          <div style="font-family:'Unbounded',cursive; font-size:28px; font-weight:900; color:white; line-height:1;">300</div>
+          <div style="font-size:12px; color:rgba(255,255,255,0.5); margin-top:6px;">Горячая линия ЦБ РФ</div>
+        </div>
+      </a>
+      <a href="tel:102" style="text-decoration:none;">
+        <div style="background:rgba(249,115,22,0.1); border:1px solid rgba(249,115,22,0.3); border-radius:16px; padding:24px; text-align:center; transition:all 0.2s; cursor:pointer;" onmouseover="this.style.background='rgba(249,115,22,0.2)'" onmouseout="this.style.background='rgba(249,115,22,0.1)'">
+          <div style="font-size:32px; margin-bottom:8px;">👮</div>
+          <div style="font-family:'Unbounded',cursive; font-size:28px; font-weight:900; color:white; line-height:1;">102</div>
+          <div style="font-size:12px; color:rgba(255,255,255,0.5); margin-top:6px;">Полиция</div>
+        </div>
+      </a>
+      <a href="tel:112" style="text-decoration:none;">
+        <div style="background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); border-radius:16px; padding:24px; text-align:center; transition:all 0.2s; cursor:pointer;" onmouseover="this.style.background='rgba(34,197,94,0.2)'" onmouseout="this.style.background='rgba(34,197,94,0.1)'">
+          <div style="font-size:32px; margin-bottom:8px;">📞</div>
+          <div style="font-family:'Unbounded',cursive; font-size:28px; font-weight:900; color:white; line-height:1;">112</div>
+          <div style="font-size:12px; color:rgba(255,255,255,0.5); margin-top:6px;">Единый экстренный номер</div>
+        </div>
+      </a>
+    </div>
+    <div style="margin-top:20px; padding:18px 22px; background:rgba(251,191,36,0.08); border:1px solid rgba(251,191,36,0.25); border-radius:14px; display:flex; gap:12px; align-items:flex-start;">
+      <span style="font-size:22px; flex-shrink:0;">⚡</span>
+      <p style="font-size:14px; color:rgba(255,255,255,0.7); line-height:1.6;">Для других банков — номер напечатан на обороте вашей карты. Если карты нет — зайдите на официальный сайт банка через поиск, а не по ссылкам из СМС.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKLIST SECTION -->
+<section id="checklist-section">
+  <div class="section-inner">
+    <span class="section-tag">Чек-лист</span>
+    <h2 class="section-title">Меня обманули — что делать за 24 часа?</h2>
+    <p class="section-sub">Пройдитесь по каждому пункту. Отмечайте выполненные шаги — не пропустите ничего важного.</p>
+    <div class="checklist-wrapper">
+      <div class="checklist-header">
+        <div class="checklist-header-icon">🚨</div>
+        <div>
+          <div class="checklist-header-title">Антимошеннический чек-лист</div>
+          <div class="checklist-header-sub">Нажимайте на пункты, чтобы отметить выполненное</div>
+        </div>
+      </div>
+      <div class="checklist-body">
+        <div class="checklist-timer-bar">
+          <div class="timer-label">⏱ Время с момента инцидента:</div>
+          <div class="timer-display" id="clTimer">00:00:00</div>
+          <button onclick="startClTimer()" style="font-size:12px; padding:6px 14px; background:#EF4444; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:600;">Запустить таймер</button>
+        </div>
+
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="cl-checkbox">✓</div>
+          <div class="cl-priority urgent">Срочно</div>
+          <div>
+            <div class="cl-text">Заблокировать банковскую карту — через приложение или по номеру 900</div>
+            <div class="cl-time">До 15 минут после инцидента</div>
+          </div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="cl-checkbox">✓</div>
+          <div class="cl-priority urgent">Срочно</div>
+          <div>
+            <div class="cl-text">Сменить PIN-код и пароль от мобильного банка</div>
+            <div class="cl-time">До 30 минут</div>
+          </div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="cl-checkbox">✓</div>
+          <div class="cl-priority urgent">Срочно</div>
+          <div>
+            <div class="cl-text">Позвонить в банк и сообщить о мошенничестве — попросить отозвать перевод</div>
+            <div class="cl-time">Чем быстрее — тем выше шанс вернуть деньги</div>
+          </div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="cl-checkbox">✓</div>
+          <div class="cl-priority soon">Сегодня</div>
+          <div>
+            <div class="cl-text">Написать заявление в полицию — онлайн на сайте МВД (mvd.ru) или лично</div>
+            <div class="cl-time">В течение 1–3 часов</div>
+          </div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="cl-checkbox">✓</div>
+          <div class="cl-priority soon">Сегодня</div>
+          <div>
+            <div class="cl-text">Сменить пароли везде, где использовался тот же пароль (почта, соцсети, госуслуги)</div>
+            <div class="cl-time">В течение 2 часов</div>
+          </div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="cl-checkbox">✓</div>
+          <div class="cl-priority soon">Сегодня</div>
+          <div>
+            <div class="cl-text">Предупредить родственников и знакомых — мошенники могут писать им от вашего имени</div>
+            <div class="cl-time">В течение дня</div>
+          </div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="cl-checkbox">✓</div>
+          <div class="cl-priority later">Завтра</div>
+          <div>
+            <div class="cl-text">Подать жалобу в ЦБ РФ через форму на cbr.ru — это ускоряет проверку банка</div>
+            <div class="cl-time">В течение 24 часов</div>
+          </div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="cl-checkbox">✓</div>
+          <div class="cl-priority later">Завтра</div>
+          <div>
+            <div class="cl-text">Проверить кредитную историю — мошенники могут оформить кредит на вас</div>
+            <div class="cl-time">В течение 48 часов</div>
+          </div>
+        </div>
+
+        <div class="cl-progress-row">
+          <div class="cl-progress-track">
+            <div class="cl-progress-fill" id="clProgressFill" style="width:0%"></div>
+          </div>
+          <div class="cl-progress-text" id="clProgressText">0 / 8</div>
+        </div>
+        <button class="cl-reset" onclick="resetChecklist()">Сбросить все отметки</button>
       </div>
     </div>
   </div>
@@ -1054,6 +1596,80 @@
           <li>Для покупок в интернете заведите отдельную карту с лимитом</li>
         </ul>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCHEMES DATABASE -->
+<section id="schemes">
+  <div class="section-inner">
+    <span class="section-tag">База данных</span>
+    <h2 class="section-title">Актуальные схемы мошенников</h2>
+    <p class="section-sub">Регулярно обновляемая база. Знайте врага в лицо — предупреждён значит вооружён.</p>
+
+    <div class="schemes-filter">
+      <button class="scheme-filter-btn active" onclick="filterSchemes('all', this)">Все</button>
+      <button class="scheme-filter-btn" onclick="filterSchemes('phone', this)">📞 Телефон</button>
+      <button class="scheme-filter-btn" onclick="filterSchemes('online', this)">🌐 Онлайн</button>
+      <button class="scheme-filter-btn" onclick="filterSchemes('social', this)">📱 Соцсети</button>
+      <button class="scheme-filter-btn" onclick="filterSchemes('invest', this)">💰 Инвестиции</button>
+    </div>
+
+    <div class="schemes-grid">
+      <div class="scheme-card" data-type="phone">
+        <span class="scheme-date">Март 2024</span>
+        <div class="scheme-badge new">🆕 Новая</div>
+        <div class="scheme-title">«Ваш родственник в беде»</div>
+        <p class="scheme-desc">Звонят и сообщают, что сын/дочь попали в ДТП или задержаны полицией. Просят срочно передать деньги курьеру.</p>
+        <div class="scheme-how"><strong>Как защититься:</strong> Немедленно позвоните родственнику напрямую. Полиция никогда не просит деньги через курьеров.</div>
+      </div>
+      <div class="scheme-card" data-type="online">
+        <span class="scheme-date">Февр. 2024</span>
+        <div class="scheme-badge online">🌐 Онлайн</div>
+        <div class="scheme-title">Поддельный Госуслуги</div>
+        <p class="scheme-desc">Фишинговые сайты с адресами gosus1ugi.ru, gosuslugi-help.ru. Крадут логин, пароль и личные данные.</p>
+        <div class="scheme-how"><strong>Как защититься:</strong> Настоящий сайт — только gosuslugi.ru. Добавьте в закладки. Включите двухфакторную аутентификацию.</div>
+      </div>
+      <div class="scheme-card" data-type="invest">
+        <span class="scheme-date">Янв. 2024</span>
+        <div class="scheme-badge invest">💰 Инвест.</div>
+        <div class="scheme-title">Крипто-инвестиции через Telegram</div>
+        <p class="scheme-desc">Через бот или канал предлагают вложить деньги в «проверенный крипто-проект». Деньги уходят — вернуть невозможно.</p>
+        <div class="scheme-how"><strong>Как защититься:</strong> Проверяйте лицензию на cbr.ru. Легальные брокеры не рекламируются в Telegram-ботах.</div>
+      </div>
+      <div class="scheme-card" data-type="phone">
+        <span class="scheme-date">Март 2024</span>
+        <div class="scheme-badge phone">📞 Звонок</div>
+        <div class="scheme-title">«Служба безопасности банка»</div>
+        <p class="scheme-desc">Сообщают о подозрительной операции и просят назвать код из СМС для «отмены транзакции». Это и есть кража.</p>
+        <div class="scheme-how"><strong>Как защититься:</strong> Банк НИКОГДА не спрашивает CVV и коды из СМС. Кладите трубку. Перезвоните сами.</div>
+      </div>
+      <div class="scheme-card" data-type="social">
+        <span class="scheme-date">Февр. 2024</span>
+        <div class="scheme-badge social">📱 Соцсети</div>
+        <div class="scheme-title">Взломанный аккаунт друга</div>
+        <p class="scheme-desc">Пишут с аккаунта знакомого с просьбой одолжить деньги «до завтра». Аккаунт взломан, человек ни о чём не знает.</p>
+        <div class="scheme-how"><strong>Как защититься:</strong> Позвоните другу по телефону перед переводом. Всегда.</div>
+      </div>
+      <div class="scheme-card" data-type="online">
+        <span class="scheme-date">Март 2024</span>
+        <div class="scheme-badge new">🆕 Новая</div>
+        <div class="scheme-title">Фейковый работодатель</div>
+        <p class="scheme-desc">Предлагают работу с высокой зарплатой. Просят заплатить за «обучение» или «оборудование» заранее. Деньги исчезают.</p>
+        <div class="scheme-how"><strong>Как защититься:</strong> Легальные работодатели не берут деньги с соискателей. Никогда и ни при каких условиях.</div>
+      </div>
+    </div>
+
+    <!-- PDF BANNER -->
+    <div class="pdf-banner">
+      <div class="pdf-banner-left">
+        <div class="pdf-icon">📄</div>
+        <div>
+          <div class="pdf-title">Памятка для пожилых родителей</div>
+          <div class="pdf-sub">1 страница · крупный шрифт · самое главное · распечатайте и повесьте на холодильник</div>
+        </div>
+      </div>
+      <button class="pdf-btn" onclick="downloadPDF()">⬇️ Скачать PDF-памятку</button>
     </div>
   </div>
 </section>
@@ -1288,6 +1904,162 @@ document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
 // Init quiz
 renderQuestion();
+
+// ===== SOS PANEL =====
+function toggleSOS() {
+  const panel = document.getElementById('sosPanel');
+  panel.classList.toggle('open');
+}
+
+// Close on outside click
+document.addEventListener('click', function(e) {
+  const sticky = document.getElementById('sos-sticky');
+  if (!sticky.contains(e.target)) {
+    document.getElementById('sosPanel').classList.remove('open');
+  }
+});
+
+// ===== CHECKLIST =====
+let clTimerInterval = null;
+let clStartTime = null;
+
+function startClTimer() {
+  if (clTimerInterval) return;
+  clStartTime = Date.now();
+  clTimerInterval = setInterval(() => {
+    const elapsed = Date.now() - clStartTime;
+    const h = Math.floor(elapsed / 3600000);
+    const m = Math.floor((elapsed % 3600000) / 60000);
+    const s = Math.floor((elapsed % 60000) / 1000);
+    document.getElementById('clTimer').textContent =
+      String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  }, 1000);
+}
+
+function toggleCheck(item) {
+  item.classList.toggle('done');
+  updateClProgress();
+}
+
+function updateClProgress() {
+  const items = document.querySelectorAll('.checklist-item');
+  const done = document.querySelectorAll('.checklist-item.done').length;
+  const pct = Math.round((done / items.length) * 100);
+  document.getElementById('clProgressFill').style.width = pct + '%';
+  document.getElementById('clProgressText').textContent = done + ' / ' + items.length;
+}
+
+function resetChecklist() {
+  document.querySelectorAll('.checklist-item').forEach(el => el.classList.remove('done'));
+  updateClProgress();
+  if (clTimerInterval) { clearInterval(clTimerInterval); clTimerInterval = null; }
+  document.getElementById('clTimer').textContent = '00:00:00';
+}
+
+// ===== SCHEMES FILTER =====
+function filterSchemes(type, btn) {
+  document.querySelectorAll('.scheme-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.scheme-card').forEach(card => {
+    if (type === 'all' || card.dataset.type === type) {
+      card.removeAttribute('data-hidden');
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+// ===== PDF GENERATION (inline, no external libs) =====
+function downloadPDF() {
+  const htmlContent = `<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Manrope:wght@400;600;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Manrope',sans-serif; background:white; color:#0A1628; padding:32px; }
+  h1 { font-family:'Unbounded',cursive; font-size:22px; font-weight:900; margin-bottom:6px; }
+  .sub { font-size:13px; color:#64748B; margin-bottom:24px; }
+  .section { margin-bottom:20px; }
+  .section-title { font-family:'Unbounded',cursive; font-size:13px; font-weight:700; color:#1A56DB; margin-bottom:10px; text-transform:uppercase; letter-spacing:1px; }
+  .rule { display:flex; gap:10px; margin-bottom:8px; align-items:flex-start; font-size:14px; line-height:1.5; }
+  .num { width:22px; height:22px; background:#EF4444; border-radius:6px; color:white; font-weight:700; font-size:11px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .num.blue { background:#1A56DB; }
+  .num.green { background:#22C55E; }
+  .alert { background:#FEE2E2; border:1px solid #FECACA; border-radius:10px; padding:14px; font-size:13px; margin-bottom:20px; }
+  .alert strong { color:#EF4444; }
+  .phones { display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; }
+  .phone { background:#EFF6FF; border:1px solid #BFDBFE; border-radius:8px; padding:10px 16px; text-align:center; }
+  .pnum { font-family:'Unbounded',cursive; font-size:22px; font-weight:900; color:#1A56DB; }
+  .pname { font-size:11px; color:#64748B; }
+  .footer { margin-top:24px; padding-top:16px; border-top:1px solid #E2E8F0; font-size:11px; color:#94A3B8; text-align:center; }
+</style>
+</head>
+<body>
+<h1>🛡️ ЗАЩИТА ОТ МОШЕННИКОВ</h1>
+<p class="sub">Памятка · Распечатайте и сохраните на видном месте</p>
+
+<div class="alert">
+  <strong>⚠️ ГЛАВНОЕ ПРАВИЛО:</strong> Если вам звонят и просят назвать код из СМС, пароль или перевести деньги на «безопасный счёт» — это МОШЕННИКИ. Положите трубку.
+</div>
+
+<div class="section">
+  <div class="section-title">🚨 Номера экстренной помощи</div>
+  <div class="phones">
+    <div class="phone"><div class="pnum">900</div><div class="pname">Сбербанк</div></div>
+    <div class="phone"><div class="pnum">300</div><div class="pname">ЦБ РФ</div></div>
+    <div class="phone"><div class="pnum">102</div><div class="pname">Полиция</div></div>
+    <div class="phone"><div class="pnum">112</div><div class="pname">Экстренный</div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">❌ Никогда не сообщайте</div>
+  <div class="rule"><div class="num">1</div><div>Код из СМС (даже «сотруднику банка»)</div></div>
+  <div class="rule"><div class="num">2</div><div>PIN-код карты</div></div>
+  <div class="rule"><div class="num">3</div><div>CVV (3 цифры на обороте карты)</div></div>
+  <div class="rule"><div class="num">4</div><div>Пароль от Госуслуг или банка</div></div>
+  <div class="rule"><div class="num">5</div><div>Серию и номер паспорта незнакомцам</div></div>
+</div>
+
+<div class="section">
+  <div class="section-title">✅ Если позвонили подозрительные — сделайте так</div>
+  <div class="rule"><div class="num blue">1</div><div>Положите трубку, не объясняя причин</div></div>
+  <div class="rule"><div class="num blue">2</div><div>Позвоните в банк сами — по номеру на карте</div></div>
+  <div class="rule"><div class="num blue">3</div><div>Расскажите близким о звонке</div></div>
+</div>
+
+<div class="section">
+  <div class="section-title">🆘 Если уже обманули — действуйте быстро</div>
+  <div class="rule"><div class="num green">1</div><div>Заблокируйте карту — приложение банка или 900</div></div>
+  <div class="rule"><div class="num green">2</div><div>Позвоните в банк, сообщите о мошенничестве</div></div>
+  <div class="rule"><div class="num green">3</div><div>Напишите заявление в полицию — mvd.ru</div></div>
+  <div class="rule"><div class="num green">4</div><div>Смените пароли везде</div></div>
+  <div class="rule"><div class="num green">5</div><div>Пожалуйтесь в ЦБ РФ — cbr.ru</div></div>
+</div>
+
+<div class="footer">ЗащитаOnline · Сохраните эту памятку · Поделитесь с близкими</div>
+</body>
+</html>`;
+
+  const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'pamyatka-ot-moshennikov.html';
+  a.click();
+  URL.revokeObjectURL(url);
+
+  // Show feedback
+  const btn = event.target;
+  const orig = btn.textContent;
+  btn.textContent = '✅ Скачано! Откройте файл и распечатайте';
+  btn.style.background = '#22C55E';
+  btn.style.color = 'white';
+  setTimeout(() => { btn.textContent = orig; btn.style.background = ''; btn.style.color = ''; }, 4000);
+}
 </script>
 
 </body>
