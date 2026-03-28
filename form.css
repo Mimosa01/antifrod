@@ -1,0 +1,285 @@
+/* ---------- Обёртка секции ---------- */
+#advtest {
+  background: #F8FAFC;
+  padding: 90px 24px;
+  border-top: 1px solid #E2E8F0;
+}
+#advtest .at-inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* ---------- Заголовок ---------- */
+.at-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: #1A56DB;
+  margin-bottom: 10px;
+}
+.at-title {
+  font-family: 'Unbounded', cursive;
+  font-size: clamp(22px, 3vw, 34px);
+  font-weight: 900; letter-spacing: -1px;
+  color: #0A1628; margin-bottom: 12px;
+}
+.at-subtitle {
+  font-size: 15px; color: #64748B;
+  line-height: 1.7; margin-bottom: 40px;
+}
+
+/* ---------- Карточка-контейнер ---------- */
+.at-card {
+  background: #fff;
+  border-radius: 24px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+
+/* ---------- Шаги (form / question / result) ---------- */
+.at-step { display: none; }
+.at-step.at-active { display: block; }
+
+/* ---------- ШАГ 1: Форма ---------- */
+.at-form-wrap { padding: 40px; }
+.at-form-title {
+  font-family: 'Unbounded', cursive;
+  font-size: 16px; font-weight: 700;
+  color: #0A1628; margin-bottom: 6px;
+}
+.at-form-sub { font-size: 13px; color: #64748B; margin-bottom: 28px; }
+
+.at-field { margin-bottom: 20px; }
+.at-label {
+  display: block; font-size: 13px; font-weight: 600;
+  color: #0A1628; margin-bottom: 8px;
+}
+.at-label span { color: #EF4444; margin-left: 2px; }
+.at-input {
+  width: 100%; padding: 13px 16px;
+  border: 2px solid #E2E8F0; border-radius: 12px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px; color: #0A1628;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.at-input:focus {
+  border-color: #1A56DB;
+  box-shadow: 0 0 0 4px rgba(26,86,219,0.08);
+}
+.at-input.at-error { border-color: #EF4444; }
+
+/* Чекбокс */
+.at-check-row {
+  display: flex; align-items: flex-start; gap: 12px;
+  margin-top: 24px; margin-bottom: 28px;
+  cursor: pointer;
+}
+.at-checkbox {
+  width: 22px; height: 22px; flex-shrink: 0;
+  border: 2px solid #CBD5E1; border-radius: 6px;
+  background: #fff; display: flex; align-items: center;
+  justify-content: center; transition: all 0.2s; margin-top: 1px;
+}
+.at-check-row input[type="checkbox"] { display: none; }
+.at-check-row input:checked + .at-checkbox {
+  background: #1A56DB; border-color: #1A56DB; color: #fff;
+}
+.at-check-label { font-size: 13px; color: #475569; line-height: 1.5; }
+.at-check-label a { color: #1A56DB; text-decoration: underline; }
+
+/* Кнопка начала */
+.at-start-btn {
+  width: 100%; padding: 16px;
+  background: #1A56DB; color: #fff;
+  font-family: 'Unbounded', cursive;
+  font-size: 14px; font-weight: 700; letter-spacing: -0.3px;
+  border: none; border-radius: 14px;
+  cursor: pointer; transition: all 0.25s;
+  opacity: 0.4; pointer-events: none;
+}
+.at-start-btn.at-ready { opacity: 1; pointer-events: all; }
+.at-start-btn.at-ready:hover {
+  background: #3B82F6;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(26,86,219,0.35);
+}
+
+/* ---------- ШАГ 2: Вопрос ---------- */
+.at-q-head {
+  background: #0A1628;
+  padding: 24px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+}
+.at-q-counter {
+  font-family: 'Unbounded', cursive;
+  font-size: 12px; font-weight: 700;
+  color: rgba(255,255,255,0.5);
+}
+.at-q-counter span { color: #fff; }
+
+/* Прогресс-бар */
+.at-progbar {
+  flex: 1; min-width: 120px; max-width: 260px;
+  height: 6px; background: rgba(255,255,255,0.1);
+  border-radius: 6px; overflow: hidden;
+}
+.at-progbar-fill {
+  height: 100%; background: #3B82F6;
+  border-radius: 6px; transition: width 0.4s ease;
+}
+.at-score-live {
+  font-family: 'Unbounded', cursive;
+  font-size: 12px; font-weight: 700; color: #4ADE80;
+}
+
+.at-q-body { padding: 36px 40px; }
+.at-question-text {
+  font-family: 'Unbounded', cursive;
+  font-size: clamp(15px, 2vw, 19px);
+  font-weight: 700; color: #0A1628;
+  line-height: 1.4; margin-bottom: 28px;
+  letter-spacing: -0.4px;
+}
+
+/* Варианты ответов */
+.at-options { display: flex; flex-direction: column; gap: 12px; }
+.at-opt {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 16px 18px;
+  border: 2px solid #E2E8F0; border-radius: 14px;
+  cursor: pointer; transition: all 0.2s;
+  background: #fff; text-align: left;
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px; color: #0A1628; font-weight: 500;
+  line-height: 1.5;
+}
+.at-opt:hover:not(:disabled) {
+  border-color: #1A56DB;
+  background: #EFF6FF;
+  transform: translateX(4px);
+}
+.at-opt-letter {
+  width: 28px; height: 28px; flex-shrink: 0;
+  border-radius: 8px; background: #F1F5F9;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Unbounded', cursive;
+  font-size: 11px; font-weight: 700; color: #64748B;
+  transition: all 0.2s;
+}
+.at-opt.at-opt-correct {
+  border-color: #22C55E; background: #F0FDF4;
+}
+.at-opt.at-opt-correct .at-opt-letter {
+  background: #22C55E; color: #fff;
+}
+.at-opt.at-opt-wrong {
+  border-color: #EF4444; background: #FEF2F2;
+}
+.at-opt.at-opt-wrong .at-opt-letter {
+  background: #EF4444; color: #fff;
+}
+
+/* Объяснение после ответа */
+.at-explain {
+  margin-top: 16px; padding: 14px 18px;
+  border-radius: 12px; font-size: 13px;
+  font-weight: 600; line-height: 1.6;
+  display: none;
+}
+.at-explain.at-show { display: block; }
+.at-explain.at-ok { background: #F0FDF4; color: #15803D; }
+.at-explain.at-fail { background: #FEF2F2; color: #B91C1C; }
+
+/* Кнопка «Следующий» */
+.at-next-btn {
+  margin-top: 24px; width: 100%;
+  padding: 14px; background: #0A1628; color: #fff;
+  font-family: 'Unbounded', cursive;
+  font-size: 13px; font-weight: 700; letter-spacing: -0.3px;
+  border: none; border-radius: 12px;
+  cursor: pointer; transition: all 0.25s;
+  display: none;
+}
+.at-next-btn.at-show { display: block; }
+.at-next-btn:hover { background: #1A56DB; transform: translateY(-1px); }
+
+/* ---------- ШАГ 3: Результат ---------- */
+.at-result-wrap { padding: 48px 40px; text-align: center; }
+.at-result-ring {
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+  border: 6px solid #22C55E;
+  transition: border-color 0.3s;
+}
+.at-result-ring.at-medium { border-color: #FBBF24; }
+.at-result-ring.at-low { border-color: #EF4444; }
+.at-result-score {
+  font-family: 'Unbounded', cursive;
+  font-size: 34px; font-weight: 900; color: #0A1628; line-height: 1;
+}
+.at-result-total { font-size: 13px; color: #64748B; }
+.at-result-title {
+  font-family: 'Unbounded', cursive;
+  font-size: 20px; font-weight: 900; color: #0A1628;
+  margin-bottom: 10px; letter-spacing: -0.5px;
+}
+.at-result-msg { font-size: 15px; color: #64748B; line-height: 1.6; margin-bottom: 28px; }
+
+/* Детализация по баллам */
+.at-result-breakdown {
+  display: flex; justify-content: center; gap: 20px;
+  flex-wrap: wrap; margin-bottom: 32px;
+}
+.at-breakdown-item {
+  background: #F1F5F9; border-radius: 12px;
+  padding: 12px 20px; text-align: center;
+}
+.at-breakdown-num {
+  font-family: 'Unbounded', cursive;
+  font-size: 22px; font-weight: 900;
+}
+.at-breakdown-label { font-size: 11px; color: #64748B; margin-top: 2px; }
+
+/* Имя на результате */
+.at-result-name {
+  background: #EFF6FF; border-radius: 12px;
+  padding: 14px 20px; margin-bottom: 24px;
+  font-size: 14px; color: #1D4ED8; font-weight: 600;
+}
+
+/* Статус отправки */
+.at-send-status {
+  font-size: 13px; color: #64748B;
+  margin-top: 12px; min-height: 20px;
+}
+.at-send-status.at-ok-send { color: #15803D; }
+.at-send-status.at-fail-send { color: #B91C1C; }
+
+/* Кнопка «Пройти снова» */
+.at-retry-btn {
+  margin-top: 8px;
+  padding: 12px 28px;
+  background: #F1F5F9; color: #0A1628;
+  font-family: 'Unbounded', cursive;
+  font-size: 12px; font-weight: 700;
+  border: none; border-radius: 10px;
+  cursor: pointer; transition: all 0.2s;
+}
+.at-retry-btn:hover { background: #E2E8F0; }
+
+/* ---------- Анимация смены шага ---------- */
+@keyframes at-fadein {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.at-step.at-active { animation: at-fadein 0.35s ease; }
+
+/* ---------- Адаптивность ---------- */
+@media (max-width: 600px) {
+  .at-form-wrap, .at-q-body, .at-result-wrap { padding: 24px 20px; }
+  .at-q-head { padding: 18px 20px; }
+}
