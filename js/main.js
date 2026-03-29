@@ -34,6 +34,7 @@ const questions = [
 let current = 0;
 let score = 0;
 let answered = false;
+let atAnswersArray = [];
 
 function renderQuestion() {
   const q = questions[current];
@@ -250,41 +251,6 @@ function downloadPDF(evt) {
 }
 
 
-// Ссылка на форму: https://docs.google.com/forms/d/e/1FAIpQLSdkMnIIo94a-aLBgnEcZyo1fet0pvCtFOthbH8OfNjADI3S4w/viewform
-
-// ================================================================
-//  НАСТРОЙКИ — ID полей Google Forms (должен совпадать текст вариантов в форме и в AT_QUESTIONS)
-// ================================================================
-const AT_GOOGLE_FORM_ID   = '1FAIpQLSdkMnIIo94a-aLBgnEcZyo1fet0pvCtFOthbH8OfNjADI3S4w';
-const AT_ENTRY_NAME       = 'entry.239915771';   // Имя
-const AT_ENTRY_AGE        = 'entry.2128759393';  // Возраст
-const AT_ENTRY_ANSWER_1  = 'entry.1818165224';
-const AT_ENTRY_ANSWER_2  = 'entry.2131372978';
-const AT_ENTRY_ANSWER_3  = 'entry.1828342047';
-const AT_ENTRY_ANSWER_4  = 'entry.1720755040';
-const AT_ENTRY_ANSWER_5  = 'entry.1964542871';
-const AT_ENTRY_ANSWER_6  = 'entry.284885333';
-const AT_ENTRY_ANSWER_7  = 'entry.1750699026';
-const AT_ENTRY_ANSWER_8  = 'entry.718686130';
-const AT_ENTRY_ANSWER_9  = 'entry.1834229679';
-const AT_ENTRY_ANSWER_10 = 'entry.729263910';
-
-/** Порядок = вопросы 1…10; в Google Form у каждого вопроса варианты дословно как в AT_QUESTIONS[].opts */
-const AT_FORM_ANSWER_ENTRIES = [
-  AT_ENTRY_ANSWER_1,
-  AT_ENTRY_ANSWER_2,
-  AT_ENTRY_ANSWER_3,
-  AT_ENTRY_ANSWER_4,
-  AT_ENTRY_ANSWER_5,
-  AT_ENTRY_ANSWER_6,
-  AT_ENTRY_ANSWER_7,
-  AT_ENTRY_ANSWER_8,
-  AT_ENTRY_ANSWER_9,
-  AT_ENTRY_ANSWER_10
-];
-// ================================================================
-
-
 // ── Банк вопросов (10 штук) ──
 const AT_QUESTIONS = [
   {
@@ -404,7 +370,8 @@ let atCurrent  = 0;   // текущий вопрос
 let atScore    = 0;   // количество правильных ответов
 let atAnswered = false;
 let atUserName = '';
-let atUserClass = '';
+let atUserMail = '';
+let atUserAge = '';
 /** Выбранный текст ответа по каждому вопросу (индекс = номер вопроса − 1), для Google Forms */
 let atPickedAnswers = [];
 
@@ -416,11 +383,12 @@ function atShowStep(id) {
 
 // ── Проверка формы: разблокировать кнопку ──
 function atCheckForm() {
-  const name    = document.getElementById('at-name').value.trim();
-  const cls     = document.getElementById('at-class').value.trim();
+  const name  = document.getElementById('at-name').value.trim();
+  const mail  = document.getElementById('at-email').value.trim();
+  const age   = document.getElementById('at-age').value.trim();
   const consent = document.getElementById('at-consent').checked;
-  const btn     = document.getElementById('at-start-btn');
-  if (name && cls && consent) {
+  const btn   = document.getElementById('at-start-btn');
+  if (name && mail && age && consent) {
     btn.classList.add('at-ready');
   } else {
     btn.classList.remove('at-ready');
@@ -429,8 +397,10 @@ function atCheckForm() {
 
 // ── Запуск теста ──
 function atStart() {
-  atUserName  = document.getElementById('at-name').value.trim();
-  atUserClass = document.getElementById('at-class').value.trim();
+  atAnswersArray = new Array(AT_QUESTIONS.length).fill(null);
+  atUserName = document.getElementById('at-name').value.trim();
+  atUserMail = document.getElementById('at-email').value.trim();
+  atUserAge  = document.getElementById('at-age').value.trim();
   atCurrent   = 0;
   atScore     = 0;
   atAnswered  = false;
@@ -496,6 +466,7 @@ function atAnswer(idx) {
   document.getElementById('at-score-live').textContent = atScore;
 
   atPickedAnswers[atCurrent] = q.opts[idx];
+  atAnswersArray[atCurrent] = (idx === AT_QUESTIONS[atCurrent].correct);
 
   // Объяснение
   const explEl = document.getElementById('at-explain');
@@ -528,8 +499,8 @@ function atShowResult() {
   document.getElementById('at-bd-correct').textContent   = atScore;
   document.getElementById('at-bd-wrong').textContent     = wrong;
   document.getElementById('at-bd-pct').textContent       = pct + '%';
-  document.getElementById('at-result-name').textContent  =
-    '👤 ' + atUserName + ' · ' + atUserClass;
+  document.getElementById('at-result-name').textContent =
+    '👤 ' + atUserName + ' · ' + atUserAge;
 
   // Уровень
   let title, msg;
@@ -552,7 +523,8 @@ function atShowResult() {
 
   atShowStep('at-step-result');
 
-  atSendToGoogle(atUserName, atUserClass, atPickedAnswers);
+  const scoreSummary = `${atScore}/${total} (${pct}%)`;
+  atSendToGoogle(atUserName, atUserAge, atUserMail, scoreSummary);
 }
 
 // ── Сброс ──
@@ -564,61 +536,38 @@ function atReset() {
   document.getElementById('at-send-status').textContent = '';
   document.getElementById('at-send-status').className   = 'at-send-status';
   // Сбрасываем форму
-  document.getElementById('at-name').value    = '';
-  document.getElementById('at-class').value   = '';
+  document.getElementById('at-name').value  = '';
+  document.getElementById('at-email').value = '';
+  document.getElementById('at-age').value   = '';
   document.getElementById('at-consent').checked = false;
   document.getElementById('at-start-btn').classList.remove('at-ready');
   atShowStep('at-step-form');
 }
 
-// ── Отправка данных в Google Forms ──
-// Если ответов нет, но в Network виден 302: в редакторе формы включите «Принимать ответы» (закрытая форма редиректит, но не сохраняет).
-// Варианты в форме должны дословно совпадать с AT_QUESTIONS[i].opts (включая «» и —).
-// POST: только имя, возраст и 10 ответов (fetch + URLSearchParams, без iframe).
-function atSendToGoogle(name, age, pickedTexts) {
+// ── Сохранение результата в Supabase (таблица quiz) ──
+async function atSendToGoogle(name, age, mail, result) {
   const statusEl = document.getElementById('at-send-status');
   statusEl.textContent = '⏳ Сохраняем результат…';
-  statusEl.className = 'at-send-status';
 
-  if (AT_FORM_ANSWER_ENTRIES.length !== AT_QUESTIONS.length) {
-    console.warn('[advtest] Число entry для ответов не совпадает с числом вопросов.');
-  }
-
-  const answersSent = AT_FORM_ANSWER_ENTRIES.reduce(
-    (n, _, i) => n + (pickedTexts[i] != null && String(pickedTexts[i]).trim() !== '' ? 1 : 0),
-    0
+  const { createClient } = supabase;
+  const sb = createClient(
+    'https://hykcogmfilydwbugvqvg.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5a2NvZ21maWx5ZHdidWd2cXZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3NDc5NjksImV4cCI6MjA5MDMyMzk2OX0.A56SJnio_v2-0B6im-UOIfEZ7vo-mIgDMSDAyaLi2iI'
   );
-  if (answersSent < AT_QUESTIONS.length) {
-    console.warn('[advtest] В Google уйдут не все ответы:', answersSent, '/', AT_QUESTIONS.length, pickedTexts);
+
+  const { error } = await sb.from('quiz').insert({
+    name:    name,
+    age:     age,
+    mail:    mail.trim() || null,
+    score:   result,
+    answers: atAnswersArray
+  });
+
+  if (error) {
+    statusEl.textContent = '⚠️ Не удалось сохранить результат';
+    statusEl.className   = 'at-send-status at-fail-send';
+  } else {
+    statusEl.textContent = '✅ Результат сохранён';
+    statusEl.className   = 'at-send-status at-ok-send';
   }
-
-  const url = `https://docs.google.com/forms/d/e/${AT_GOOGLE_FORM_ID}/formResponse`;
-
-  function appendTrimmed(body, key, value) {
-    if (value == null) return;
-    const s = String(value).trim();
-    if (s === '') return;
-    body.append(key, s);
-  }
-
-  const body = new URLSearchParams();
-  appendTrimmed(body, AT_ENTRY_NAME, name);
-  appendTrimmed(body, AT_ENTRY_AGE, age);
-  AT_FORM_ANSWER_ENTRIES.forEach((entryKey, i) => appendTrimmed(body, entryKey, pickedTexts[i]));
-
-  fetch(url, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-    body
-  })
-    .then(() => {
-      statusEl.textContent = '✅ Результат сохранён';
-      statusEl.className = 'at-send-status at-ok-send';
-    })
-    .catch((err) => {
-      console.error('[advtest] Ошибка отправки', err);
-      statusEl.textContent = '⚠️ Не удалось сохранить (нет соединения)';
-      statusEl.className = 'at-send-status at-fail-send';
-    });
 }

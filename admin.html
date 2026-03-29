@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Админ-панель · Тест по защите от мошенников</title>
+
+<!-- Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/admin.css">
+</head>
+<body>
+
+<!-- =============================================================
+     ЭКРАН ЛОГИНА
+     ============================================================= -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">🛡️</div>
+      <div class="login-logo-text">ЗащитаOnline<span>Admin Panel</span></div>
+    </div>
+    <h1 class="login-title">Вход</h1>
+    <p class="login-sub">Доступ только для администраторов</p>
+
+    <div class="login-field">
+      <label class="login-label" for="l-email">Email</label>
+      <input class="login-input" id="l-email" type="email" placeholder="admin@example.com"
+             onkeydown="if(event.key==='Enter') doLogin()">
+    </div>
+    <div class="login-field">
+      <label class="login-label" for="l-pass">Пароль</label>
+      <input class="login-input" id="l-pass" type="password" placeholder="••••••••"
+             onkeydown="if(event.key==='Enter') doLogin()">
+    </div>
+
+    <button class="login-btn" id="login-btn" onclick="doLogin()">Войти →</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- =============================================================
+     ДАШБОРД
+     ============================================================= -->
+<div id="dashboard">
+  <div class="layout">
+
+    <!-- ── Сайдбар ── -->
+    <aside class="sidebar">
+      <div class="sb-logo">
+        <div class="sb-logo-icon">🛡️</div>
+        <div class="sb-logo-text">ЗащитаOnline<span>Admin</span></div>
+      </div>
+      <div class="sb-section-label">Аналитика</div>
+      <ul class="sb-nav">
+        <li class="sb-nav-item">
+          <a href="#" id="nav-overview" class="active" onclick="showSection('overview');return false;">
+            <span class="sb-nav-icon">📊</span> Обзор
+          </a>
+        </li>
+        <li class="sb-nav-item">
+          <a href="#" id="nav-responses" onclick="showSection('responses');return false;">
+            <span class="sb-nav-icon">📋</span> Все прохождения
+          </a>
+        </li>
+        <li class="sb-nav-item">
+          <a href="#" id="nav-questions" onclick="showSection('questions');return false;">
+            <span class="sb-nav-icon">❓</span> По вопросам
+          </a>
+        </li>
+      </ul>
+      <div class="sb-footer">
+        <div class="sb-user">
+          <div class="sb-user-avatar">👤</div>
+          <div class="sb-user-email" id="sb-email">—</div>
+          <button class="sb-logout-btn" onclick="doLogout()" title="Выйти">↩</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── Main ── -->
+    <main class="main">
+
+      <!-- ─────────── ОБЗОР ─────────── -->
+      <div id="sec-overview">
+        <div class="page-head">
+          <div>
+            <div class="page-title">Обзор</div>
+            <div class="page-sub" id="last-update">Загрузка…</div>
+          </div>
+          <div class="head-actions">
+            <button class="btn-outline" onclick="loadAll()">🔄 Обновить</button>
+            <button class="btn-primary" onclick="exportCSV()">⬇ CSV</button>
+          </div>
+        </div>
+
+        <!-- Фильтры -->
+        <div class="filters">
+          <input class="filter-input" id="f-class" type="text" placeholder="🔍 Класс / возраст…" oninput="applyFilters()">
+          <input class="filter-input" id="f-date-from" type="date" onchange="applyFilters()" title="С даты">
+          <input class="filter-input" id="f-date-to"   type="date" onchange="applyFilters()" title="По дату">
+          <button class="btn-outline" onclick="clearFilters()">✕ Сброс</button>
+        </div>
+
+        <!-- Метрики -->
+        <div class="metrics">
+          <div class="metric-card mc-i">
+            <span class="metric-icon">👥</span>
+            <div class="metric-value" id="m-total">—</div>
+            <div class="metric-label">Всего прохождений</div>
+          </div>
+          <div class="metric-card mc-g">
+            <span class="metric-icon">🏆</span>
+            <div class="metric-value" id="m-avg">—</div>
+            <div class="metric-label">Средний балл (из 10)</div>
+          </div>
+          <div class="metric-card mc-y">
+            <span class="metric-icon">✅</span>
+            <div class="metric-value" id="m-high">—</div>
+            <div class="metric-label">Высокий результат</div>
+          </div>
+          <div class="metric-card mc-r">
+            <span class="metric-icon">⚠️</span>
+            <div class="metric-value" id="m-low">—</div>
+            <div class="metric-label">Низкий результат</div>
+          </div>
+        </div>
+
+        <!-- Графики -->
+        <div class="dash-grid">
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div class="dash-card-title">Распределение баллов</div>
+              <div class="dash-card-badge">0 – 10</div>
+            </div>
+            <div class="dash-card-body">
+              <div class="chart-wrap"><canvas id="scoreChart"></canvas></div>
+            </div>
+          </div>
+
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div class="dash-card-title">Уровни результатов</div>
+            </div>
+            <div class="dash-card-body">
+              <div class="chart-wrap"><canvas id="levelChart"></canvas></div>
+            </div>
+          </div>
+
+          <div class="dash-card dash-card-full">
+            <div class="dash-card-head">
+              <div class="dash-card-title">Активность по дням</div>
+              <div class="dash-card-badge">последние 14 дней</div>
+            </div>
+            <div class="dash-card-body">
+              <div class="chart-wrap-tall"><canvas id="timeChart"></canvas></div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /overview -->
+
+      <!-- ─────────── ВСЕ ПРОХОЖДЕНИЯ ─────────── -->
+      <div id="sec-responses" style="display:none;">
+        <div class="page-head">
+          <div>
+            <div class="page-title">Все прохождения</div>
+            <div class="page-sub">Полный список участников</div>
+          </div>
+          <div class="head-actions">
+            <input class="filter-input" id="f-search" type="text"
+                   placeholder="🔍 Имя, возраст или email…" oninput="applyFilters()">
+            <button class="btn-outline" onclick="loadAll()">🔄</button>
+            <button class="btn-primary" onclick="exportCSV()">⬇ CSV</button>
+          </div>
+        </div>
+
+        <div class="dash-card">
+          <div class="dash-card-head">
+            <div class="dash-card-title">Результаты</div>
+            <div class="dash-card-badge" id="resp-count">0</div>
+          </div>
+          <div id="resp-table-wrap">
+            <div class="loader"><div class="spinner"></div>Загружаем…</div>
+          </div>
+          <div class="pagination" id="pagination" style="display:none;">
+            <button class="pg-btn" id="pg-prev" onclick="changePage(-1)">← Назад</button>
+            <div class="pg-info" id="pg-info"></div>
+            <button class="pg-btn" id="pg-next" onclick="changePage(1)">Вперёд →</button>
+          </div>
+        </div>
+      </div><!-- /responses -->
+
+      <!-- ─────────── ПО ВОПРОСАМ ─────────── -->
+      <div id="sec-questions" style="display:none;">
+        <div class="page-head">
+          <div>
+            <div class="page-title">Анализ по вопросам</div>
+            <div class="page-sub">Процент правильных ответов на каждый вопрос теста</div>
+          </div>
+          <div class="head-actions">
+            <button class="btn-outline" onclick="loadAll()">🔄 Обновить</button>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-head">
+            <div class="dash-card-title">Правильных ответов, %</div>
+            <div class="dash-card-badge" id="q-total-label">по всем</div>
+          </div>
+          <div class="dash-card-body" id="q-bars-wrap">
+            <div class="loader"><div class="spinner"></div>Загружаем…</div>
+          </div>
+        </div>
+      </div><!-- /questions -->
+
+    </main>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script src="./js/admin.js"></script>
+
+</body>
+</html>

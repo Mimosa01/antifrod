@@ -5,8 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Защита от мошенников — Будь умнее!</title>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="form.css">
+<link rel="stylesheet" href="./css/style.css">
+<link rel="stylesheet" href="./css/form.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -658,9 +659,17 @@
           </div>
 
           <div class="at-field">
-            <label class="at-label" for="at-class">Возраст<span>*</span></label>
-            <input class="at-input" id="at-class" type="text"
-                   placeholder="Введите ваш возраст"
+            <label class="at-label" for="at-email">Электронная почта<span>*</span></label>
+            <input class="at-input" id="at-email" type="email" inputmode="email"
+                   placeholder="name@example.com" autocomplete="email"
+                   oninput="atCheckForm()">
+          </div>
+
+          <div class="at-field">
+            <label class="at-label" for="at-age">Возраст<span>*</span></label>
+            <input class="at-input" id="at-age" type="text"
+                   placeholder="Введите возраст"
+                   autocomplete="off"
                    oninput="atCheckForm()">
           </div>
 
@@ -734,7 +743,7 @@
   <p>© 2024 ЗащитаOnline · Информация носит ознакомительный характер · Будьте бдительны!</p>
 </footer>
 
-<script src="main.js"></script>
+<script src="./js/main.js"></script>
 
 </body>
 </html>
