@@ -282,15 +282,6 @@ const AT_FORM_ANSWER_ENTRIES = [
   AT_ENTRY_ANSWER_9,
   AT_ENTRY_ANSWER_10
 ];
-
-/**
- * Токен из Payload запроса formResponse (как в text.txt: fbzx + partialResponse).
- * Со временем устаревает — снова откройте форму в предпросмотре, отправьте тест, в Network скопируйте fbzx.
- */
-const AT_FORM_FBZX = '1077888611117272869';
-
-/** Доп. поля из дампа Google (обычно не нужны; при сбоях можно добавить { dlut: '…', hud: 'true' }) */
-const AT_FORM_EXTRAS = null;
 // ================================================================
 
 
@@ -583,7 +574,7 @@ function atReset() {
 // ── Отправка данных в Google Forms ──
 // Если ответов нет, но в Network виден 302: в редакторе формы включите «Принимать ответы» (закрытая форма редиректит, но не сохраняет).
 // Варианты в форме должны дословно совпадать с AT_QUESTIONS[i].opts (включая «» и —).
-// POST через <form> в iframe + acceptCharset UTF-8.
+// POST: только имя, возраст и 10 ответов (fetch + URLSearchParams, без iframe).
 function atSendToGoogle(name, age, pickedTexts) {
   const statusEl = document.getElementById('at-send-status');
   statusEl.textContent = '⏳ Сохраняем результат…';
@@ -602,88 +593,32 @@ function atSendToGoogle(name, age, pickedTexts) {
   }
 
   const url = `https://docs.google.com/forms/d/e/${AT_GOOGLE_FORM_ID}/formResponse`;
-  const iframeName = `gf_submit_${Date.now()}`;
-  const iframe = document.createElement('iframe');
-  iframe.name = iframeName;
-  iframe.setAttribute('aria-hidden', 'true');
-  iframe.tabIndex = -1;
-  Object.assign(iframe.style, {
-    position: 'fixed',
-    left: '0',
-    top: '0',
-    width: '1px',
-    height: '1px',
-    opacity: '0',
-    border: 'none',
-    pointerEvents: 'none'
-  });
-  document.body.appendChild(iframe);
 
-  const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = url;
-  form.target = iframeName;
-  form.acceptCharset = 'UTF-8';
-  form.style.display = 'none';
-
-  function addHidden(entryKey, value) {
+  function appendTrimmed(body, key, value) {
     if (value == null) return;
     const s = String(value).trim();
     if (s === '') return;
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = entryKey;
-    input.value = s;
-    form.appendChild(input);
+    body.append(key, s);
   }
 
-  /** Пустые скрытые поля — Google шлёт их для вопросов с вариантами (см. entry.*_sentinel в text.txt). */
-  function addHiddenEmpty(name) {
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = name;
-    input.value = '';
-    form.appendChild(input);
-  }
+  const body = new URLSearchParams();
+  appendTrimmed(body, AT_ENTRY_NAME, name);
+  appendTrimmed(body, AT_ENTRY_AGE, age);
+  AT_FORM_ANSWER_ENTRIES.forEach((entryKey, i) => appendTrimmed(body, entryKey, pickedTexts[i]));
 
-  addHidden('fvv', '1');
-  addHidden('pageHistory', '0');
-
-  addHidden(AT_ENTRY_NAME, name);
-  addHidden(AT_ENTRY_AGE, age);
-  AT_FORM_ANSWER_ENTRIES.forEach((entryKey, i) => addHidden(entryKey, pickedTexts[i]));
-  AT_FORM_ANSWER_ENTRIES.forEach((entryKey) => addHiddenEmpty(`${entryKey}_sentinel`));
-
-  if (AT_FORM_FBZX && String(AT_FORM_FBZX).trim() !== '') {
-    const zx = String(AT_FORM_FBZX).trim();
-    addHidden('fbzx', zx);
-    addHidden('partialResponse', `[null,null,"${zx}"]`);
-    addHidden('submissionTimestamp', String(Date.now()));
-  } else {
-    console.warn('[advtest] Задайте AT_FORM_FBZX (из Network → formResponse → fbzx), иначе форма может не сохранять ответ.');
-  }
-
-  if (AT_FORM_EXTRAS && typeof AT_FORM_EXTRAS === 'object') {
-    Object.keys(AT_FORM_EXTRAS).forEach((k) => addHidden(k, AT_FORM_EXTRAS[k]));
-  }
-
-  document.body.appendChild(form);
-  try {
-    form.submit();
-  } catch (err) {
-    console.error('[advtest] Ошибка отправки формы', err);
-    statusEl.textContent = '⚠️ Не удалось отправить (см. консоль)';
-    statusEl.className = 'at-send-status at-fail-send';
-    form.remove();
-    iframe.remove();
-    return;
-  }
-
-  statusEl.textContent = '✅ Результат сохранён';
-  statusEl.className = 'at-send-status at-ok-send';
-
-  setTimeout(() => {
-    form.remove();
-    iframe.remove();
-  }, 15_000);
+  fetch(url, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+    body
+  })
+    .then(() => {
+      statusEl.textContent = '✅ Результат сохранён';
+      statusEl.className = 'at-send-status at-ok-send';
+    })
+    .catch((err) => {
+      console.error('[advtest] Ошибка отправки', err);
+      statusEl.textContent = '⚠️ Не удалось сохранить (нет соединения)';
+      statusEl.className = 'at-send-status at-fail-send';
+    });
 }
